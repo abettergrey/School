@@ -53,6 +53,7 @@ string conv_to_post()
 	
 	//while(!infile.eof())
 	//{
+		bool flag = true;
 		//printing infix
 		cout<<"Infix: "<<wholeline<<endl;
 
@@ -82,16 +83,25 @@ string conv_to_post()
 				infix.push(curr);
 			}
 
-			if(curr=="(")
+			if(curr=="("){
 				infix.push(curr);
+				flag = false;
+			}
 	
 			if(curr== ")")
 			{
-				while(infix.observe()!= "(")
-					post=post + infix.pop();
-				temp= infix.pop();
+				if(!flag){
+					while(infix.observe()!= "(")
+						post=post + infix.pop();
+					temp= infix.pop();
+				}else{
+					//continue past
+					//and throw out the 
+					//extra ")"
+				}
 			}
 		}
+
 
 		//dumping the stack
 		while(!infix.isEmpty())
@@ -115,5 +125,3 @@ int precedence(string n)
 	return the_r;
 
 }
-
-
