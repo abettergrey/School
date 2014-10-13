@@ -53,12 +53,13 @@ string conv_to_post()
 	
 	//while(!infile.eof())
 	//{
-		bool flag = true;
+		bool flag = false;
+  		bool bigflag = true;
 		//printing infix
 		cout<<"Infix: "<<wholeline<<endl;
 
 		//looping until postfix is done
-		while(count < wholeline.length())
+		while(count < wholeline.length() && bigflag)
 		{
 			//curr is the focus point
 			curr= wholeline.substr(count, 1);
@@ -85,27 +86,30 @@ string conv_to_post()
 
 			if(curr=="("){
 				infix.push(curr);
-				flag = false;
+				flag = true;
 			}
 	
 			if(curr== ")")
 			{
-				if(!flag){
+              if(flag == true)
+              {
 					while(infix.observe()!= "(")
-						post=post + infix.pop();
+						post=post + infix.pop(); //If stack is empty 
 					temp= infix.pop();
-				}else{
-					//continue past
-					//and throw out the 
-					//extra ")"
-				}
+                	flag = false;
+              }
+              else
+                	bigflag=false;
 			}
 		}
-
-
-		//dumping the stack
-		while(!infix.isEmpty())
-			post= post + infix.pop();
+		if(bigflag)
+        {
+			//dumping the stack
+			while(!infix.isEmpty())
+				post= post + infix.pop();
+        }
+  		else
+          post = "INPROPER INFIX EQUATION";
 	//}
 	return post;
 }
