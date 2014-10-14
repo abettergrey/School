@@ -15,7 +15,13 @@
 //*************************************
 /* Developmet History
 	10/8/2014:
-		Started. 
+		Started. Created stack and conversion to post.
+        Need to fix bug where inproper infix causes
+        segmentation fault.
+    10/13/2014
+    	Fixed bug. Inproper infix now regected.
+    10/14/2014
+    	Started turning postfix into assembly code.
 */
 
 #include <iostream>
@@ -67,7 +73,7 @@ string conv_to_post()
 				top= infix.observe();
 	
 			count++;
-		
+		  cout << curr <<endl;
 			//appending if varible
 			if(curr >= "A" && curr <="Z")
 				post=post+curr;
@@ -128,4 +134,9 @@ int precedence(string n)
 
 	return the_r;
 
+}
+
+String convert_to_assembly(string postfix)
+{
+  
 }
