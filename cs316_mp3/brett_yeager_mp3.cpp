@@ -22,6 +22,8 @@
     	Fixed bug. Inproper infix now regected.
     10/14/2014
     	Started turning postfix into assembly code.
+	10/15/2014
+		
 */
 
 #include <iostream>
@@ -30,42 +32,46 @@
 using namespace std;
 
 #include "StackType.h"
-string conv_to_post();
+string conv_to_post(string wholeline);
+string postfix_to_assembly(string postfix);
 int precedence(string n);
 
 int main()
 {
-	string postfix = conv_to_post();
+	ifstream infile;
+	string wholeline;
+	infile.open("cs316mp3.dat");
+	infile >>wholeline;
+	string postfix = conv_to_post(wholeline);
 	cout << postfix <<endl;
+	while(!infile.eof())
+	{
+		infile >>wholeline;
+		string postfix = conv_to_post(wholeline);
+		cout << "PostFix: " << postfix <<endl;
+		string as_code = postfix_to_assembly(postfix);
+		cout << as_code <<endl;
+	}
 	return 0;
 }
 
-string conv_to_post() 
+string conv_to_post(string wholeline) 
 {
 	StackType<string> infix(30);
-	ifstream infile;
-	string wholeline;
+
 	string curr;
 	string post="";
 	string temp;
 	string top;
 	int count=0;
+	bool bad_infix = false;
 
-	//opening and reading file
-	infile.open("cs316mp3.dat");
-
-	infile >>wholeline;
 	
-	
-	//while(!infile.eof())
-	//{
-		bool flag = false;
-  		bool bigflag = true;
 		//printing infix
 		cout<<"Infix: "<<wholeline<<endl;
 
 		//looping until postfix is done
-		while(count < wholeline.length() && bigflag)
+		while(count < wholeline.length())
 		{
 			//curr is the focus point
 			curr= wholeline.substr(count, 1);
@@ -73,7 +79,7 @@ string conv_to_post()
 				top= infix.observe();
 	
 			count++;
-		  cout << curr <<endl;
+		
 			//appending if varible
 			if(curr >= "A" && curr <="Z")
 				post=post+curr;
@@ -90,40 +96,33 @@ string conv_to_post()
 				infix.push(curr);
 			}
 
-			if(curr=="("){
+			if(curr=="(")
 				infix.push(curr);
-				flag = true;
-			}
 	
 			if(curr== ")")
 			{
-              if(flag == true)
-              {
-					while(infix.observe()!= "(")
-						post=post + infix.pop(); //If stack is empty 
+				while(!bad_infix && infix.observe()!= "(")
+				{
+					post=post + infix.pop();
+					if(infix.isEmpty())
+						bad_infix = true;
+				}
+				if(!bad_infix)
 					temp= infix.pop();
-                	flag = false;
-              }
-              else
-                	bigflag=false;
 			}
 		}
-		if(bigflag)
-        {
-			//dumping the stack
-			while(!infix.isEmpty())
-				post= post + infix.pop();
-        }
-  		else
-          post = "INPROPER INFIX EQUATION";
-	//}
+
+		//dumping the stack
+		while(!infix.isEmpty() && !bad_infix)
+			post= post + infix.pop();
+		if(bad_infix)
+			post = "INPROPER INFIX!";
 	return post;
 }
 
 int precedence(string n)
 {
-	int the_r;
-
+	int the_r = 0;
 
 	if(n == "+" || n =="-")
 		the_r= 1;
@@ -136,7 +135,39 @@ int precedence(string n)
 
 }
 
-String convert_to_assembly(string postfix)
+string postfix_to_assembly(string postfix) 
 {
-  
+	string assembly = "";
+	int temp_count = 0;
+	StackType<string> stack(30);
+	for(int i =0; i < postfix.length(); i++)
+	{
+		string curr = postfix.substr(i,1);
+		if(curr >= "A" && curr <="Z")
+			stack.push(curr);
+		else
+		{
+			string op2 = stack.pop();
+			if(stack.isEmpty())
+				return "Not sufficient values in the expression";
+			else
+			{
+				string op1 = stack.pop();
+				assembly = assembly + "LD " + op1 + "\n";
+				if(curr == "+")
+					assembly = assembly + "AD " + op2 + "\n";
+				else if(curr == "-")
+					assembly = assembly + "SB " + op2 + "\n";
+				else if(curr == "*")
+					assembly = assembly + "ML " + op2 + "\n";
+				else
+					assembly = assembly + "DV " + op2 + "\n"; 
+				temp_count++;
+				assembly = assembly + "ST TEMP" + to_string(temp_count) + "\n";
+				stack.push("TEMP" + to_string(temp_count));
+			}
+		}
+	}
+	return assembly;
 }
+
