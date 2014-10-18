@@ -23,6 +23,10 @@
     10/14/2014
     	Started turning postfix into assembly code.
 	10/15/2014
+		Finished convertion to assembly code.
+	10/18/2014
+		Created a function to convert assembly
+		to binary. 
 		
 */
 
@@ -35,6 +39,7 @@ using namespace std;
 string conv_to_post(string wholeline);
 string postfix_to_assembly(string postfix);
 int precedence(string n);
+string assembly_to_binary(string assem_code);
 
 int main()
 {
@@ -44,17 +49,45 @@ int main()
 	infile >>wholeline;
 	string postfix = conv_to_post(wholeline);
 	cout << postfix <<endl;
+	cout << "PostFix: " << postfix <<endl;
+	if(postfix != "INPROPER INFIX!")
+	{
+		cout << "Assembly Code:" <<endl;
+		string as_code = postfix_to_assembly(postfix);
+		cout << as_code <<endl;
+		cout << "Binary Code:" <<endl;
+		string bin_code = assembly_to_binary(as_code);
+		cout << bin_code <<endl;
+	}
+	else
+	{
+		cout << "Cannot convert to Postfix. Skipping convertions." << endl <<endl; 
+	}
+	cout << "-----------------------------------" <<endl;
 	while(!infile.eof())
 	{
 		infile >>wholeline;
 		string postfix = conv_to_post(wholeline);
 		cout << "PostFix: " << postfix <<endl;
-		string as_code = postfix_to_assembly(postfix);
-		cout << as_code <<endl;
+		if(postfix != "INPROPER INFIX!")
+		{
+			cout << "Assembly Code:" <<endl;
+			string as_code = postfix_to_assembly(postfix);
+			cout << as_code <<endl;
+			cout << "Binary Code:" <<endl;
+			string bin_code = assembly_to_binary(as_code);
+			cout << bin_code <<endl;
+		}
+		else
+		{
+			cout << "Cannot convert to Postfix. Skipping convertions." << endl <<endl; 
+		}
+		cout << "-----------------------------------" <<endl;
 	}
 	return 0;
 }
 
+//converts a infix expression to a postfix
 string conv_to_post(string wholeline) 
 {
 	StackType<string> infix(30);
@@ -120,6 +153,7 @@ string conv_to_post(string wholeline)
 	return post;
 }
 
+//assigns precedence for operators 
 int precedence(string n)
 {
 	int the_r = 0;
@@ -135,6 +169,7 @@ int precedence(string n)
 
 }
 
+//converts postfix to assembly
 string postfix_to_assembly(string postfix) 
 {
 	string assembly = "";
@@ -169,5 +204,45 @@ string postfix_to_assembly(string postfix)
 		}
 	}
 	return assembly;
+}
+
+//converts assembly to binary code
+string assembly_to_binary(string assem_code)
+{
+	string memery[30] = {"00000110", "00000111", "00001000", "00001001",
+						"00001010", "00001011", "00001100", "00001101",
+						"00001110", "00001111", "00010000", "00010001",
+						"00010010", "00010011", "00010100", "00010101",
+						"00010110", "00010111", "00011000", "00011001",
+						"00011010", "00011011", "00011100", "00011101",
+						"00011110", "00011111", "00100000", "00100001"};
+	string output = "";
+	int curr_mem = 0;
+	int curr_pos = 0;
+	while ((curr_pos = assem_code.find(" ")) != std::string::npos)
+	{
+		string code_in = assem_code.substr(0, curr_pos);
+
+		if(code_in == "LD")
+			output += "0000";
+		else if(code_in == "ST")
+			output += "0001";
+		else if(code_in == "AD")
+			output += "0010";
+		else if(code_in == "SB")
+			output += "0011";
+		else if(code_in == "ML")
+			output += "0100";
+		else if(code_in == "DV")
+			output += "0101";
+		else
+		{
+			output += memery[curr_mem];
+			curr_mem++;
+		}
+		assem_code.erase(0, curr_pos + 1);
+	}
+	return output;
+	
 }
 
