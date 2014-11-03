@@ -59,6 +59,7 @@ int main()
 		ave_wait += clock_time - current_task.get_arive_time();
 		ave_turnaround += (clock_time - current_task.get_arive_time()) +current_task.get_exe_time();
 
+      	my_queue.pop();
 		if(!infile.eof())
 		{
 			infile >>pri >> id >> in_time;
@@ -67,7 +68,6 @@ int main()
 		}
 
 		clock_time += current_task.get_exe_time() +1;
-		my_queue.pop();
 	}
 	infile.close();
 	cout <<"The total number of jobs executed = " <<total_exe <<endl;
@@ -77,4 +77,3 @@ int main()
 	cout <<"The system throughtput = " <<(total_exe + .0) / (clock_time + .0) <<endl;
 	return 0;
 }
-
