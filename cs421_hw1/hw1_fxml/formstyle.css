@@ -1,0 +1,10 @@
+.text-field {
+-fx-font-size: 12pt;
+}
+.button {
+-fx-background-color: red;
+}
+.label {
+-fx-font-size: 12pt;
+-fx-font-family: "Courier New";
+}

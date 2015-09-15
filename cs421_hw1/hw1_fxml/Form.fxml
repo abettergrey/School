@@ -41,21 +41,22 @@
 	</ChoiceBox>
 	<Label text="Additional Toppings:" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="1"/>
 	<VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="1">
-	 <CheckBox fx:id="CheckBox1" text="Extra Cheese" />
-	 <CheckBox fx:id="CheckBox2" text="Green Pepper" />
-	 <CheckBox fx:id="CheckBox3" text="Onion" />
-	 <CheckBox fx:id="CheckBox4" text="Mushroom" />
-	 <CheckBox fx:id="CheckBox5" text="Black Olive" />
-	 <CheckBox fx:id="CheckBox6" text="Tomato" />
-	 <CheckBox fx:id="CheckBox7" text="Jalapeno Pepper" />
+	 <CheckBox fx:id="CheckBox1" text="Extra Cheese" onAction="#ChangePrice" />
+	 <CheckBox fx:id="CheckBox2" text="Green Pepper" onAction="#ChangePrice" />
+	 <CheckBox fx:id="CheckBox3" text="Onion"  onAction="#ChangePrice"/>
+	 <CheckBox fx:id="CheckBox4" text="Mushroom"  onAction="#ChangePrice"/>
+	 <CheckBox fx:id="CheckBox5" text="Black Olive" onAction="#ChangePrice"/>
+	 <CheckBox fx:id="CheckBox6" text="Tomato" onAction="#ChangePrice"/>
+	 <CheckBox fx:id="CheckBox7" text="Jalapeno Pepper" onAction="#ChangePrice"/>
 	</VBox>
-	<Label text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+	<Label text="Price(Including tax):" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
 	<Label fx:id="TotalPrice" text="7.00" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
 	<HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.columnSpan="5">
-		<Button text="Clear"/>
-		<Button text="Add Pizza"/>
+		<Button text="Clear" onAction="#ClearForm"/>
+		<Button text="View Orders" onAction="#ViewOrder"/>
+		<Button text="Order" onAction="#SubmitForm"/>
 	</HBox>
-	<!-- <stylesheets>
+	<stylesheets>
 		<URL value="@formstyle.css" />
-	</stylesheets> -->
+	</stylesheets>
 </GridPane>
